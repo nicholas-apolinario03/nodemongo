@@ -12,7 +12,8 @@ connectDB()
 
 app.get('/getData', async (req, res) => {
   try {
-
+    const client = new MongoClient(mongoURL, { useUnifiedTopology: true });
+    await client.connect();
     const collection = client.db('ola').collection('slk');
 
     
