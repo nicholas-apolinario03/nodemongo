@@ -23,7 +23,11 @@ app.get('/getData', async (req, res) => {
     
     await client.close();
 
-    res.json(data);
+  const labels = data.map(item => item.data);
+    const values = data.map(item => item.mediçao);
+
+    // Responda com os dados em formato JSON
+    res.json({ labels, values });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao buscar dados no MongoDB' });
