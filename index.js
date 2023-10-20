@@ -7,6 +7,7 @@ require('dotenv').config()
 app.use(express.json())
 
 const connectDB = require('./connectMongo')
+const { MongoClient } = require('mongodb');
 
 connectDB()
 
