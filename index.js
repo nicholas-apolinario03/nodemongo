@@ -12,7 +12,7 @@ connectDB()
 
 app.get('/getData', async (req, res) => {
   try {
-    const client = new MongoClient(mongoURL, { useUnifiedTopology: true });
+    const client = new MongoClient(connectDB, { useUnifiedTopology: true });
     await client.connect();
     const collection = client.db('ola').collection('slk');
 
