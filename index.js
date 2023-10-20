@@ -3,12 +3,12 @@ const express = require('express')
 const app = express()
 
 require('dotenv').config()
-
+const cors = require('cors');
 app.use(express.json())
 
 const connectDB = require('./connectMongo')
 const { MongoClient } = require('mongodb');
-
+app.use(cors());
 connectDB()
 
 app.get('/getData', async (req, res) => {
