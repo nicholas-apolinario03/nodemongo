@@ -10,110 +10,23 @@ const connectDB = require('./connectMongo')
 
 connectDB()
 
-const BookModel = require('./models/book.model')
+app.get('/getData', async (req, res) => {
+  try {
 
-app.get('/api/v1/books', async (req, res) => {
+    const collection = client.db('ola').collection('slk');
 
-    const { limit = 5, orderBy = 'name', sortBy = 'asc', keyword } = req.query
-    let page = +req.query?.page
+    
+    const data = await collection.find({}).toArray();
 
-    if (!page || page <= 0) page = 1
+    
+    await client.close();
 
-    const skip = (page - 1) * +limit
-
-    const query = {}
-
-    if (keyword) query.name = { "$regex": keyword, "$options": "i" }
-
-    try {
-        const data = await BookModel.find(query).skip(skip).limit(limit).sort({[orderBy]: sortBy})
-        const totalItems = await BookModel.countDocuments(query)
-        return res.status(200).json({
-            msg: 'Ok',
-            data,
-            totalItems,
-            totalPages: Math.ceil(totalItems / limit),
-            limit: +limit,
-            currentPage: page
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: error.message
-        })
-    }
-})
-
-app.get('/api/v1/books/:id', async (req, res) => {
-    try {
-        const data = await BookModel.findById(req.params.id)
-
-        if (data) {
-            return res.status(200).json({
-                msg: 'Ok',
-                data
-            })
-        }
-
-        return res.status(404).json({
-            msg: 'Not Found',
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: error.message
-        })
-    }
-})
-
-app.post('/api/v1/books', async (req, res) => {
-    try {
-        const { name, author, price, description } = req.body
-        const book = new BookModel({
-            name, author, price, description
-        })
-        const data = await book.save()
-        return res.status(200).json({
-            msg: 'Ok',
-            data
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: error.message
-        })
-    }
-})
-
-app.put('/api/v1/books/:id', async (req, res) => {
-    try {
-        const { name, author, price, description } = req.body
-        const { id } = req.params
-
-        const data = await BookModel.findByIdAndUpdate(id, {
-            name, author, price, description
-        }, { new: true })
-
-        return res.status(200).json({
-            msg: 'Ok',
-            data
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: error.message
-        })
-    }
-})
-
-app.delete('/api/v1/books/:id', async (req, res) => {
-    try {
-        await BookModel.findByIdAndDelete(req.params.id)
-        return res.status(200).json({
-            msg: 'Ok',
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: error.message
-        })
-    }
-})
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao buscar dados no MongoDB' });
+  }
+});
 
 const PORT = process.env.PORT
 
