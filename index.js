@@ -25,7 +25,7 @@ app.get('/getData', async (req, res) => {
   'umidade_solo',
   'vento_direcao',
   'vento_velocidade',
-  'heigth'
+  'height'
 ];
 
 const data = {};
