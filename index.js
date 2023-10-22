@@ -29,7 +29,7 @@ app.get('/getData', async (req, res) => {
 
     for (let i = 0; i < collections.length; i++) {
       const collection = client.db('data_sensor').collection(collections[i]);
-      const dataItems = await collection.find({}).limit(10).toArray();
+      const dataItems = await collection.find({}).limit(20).toArray();
       data[`labels${i + 1}`] = dataItems.map(item => item.date);
       data[`values${i + 1}`] = dataItems.map(item => item.data);
     }
