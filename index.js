@@ -20,7 +20,7 @@ app.get('/getData', async (req, res) => {
   'luz_ambiente',
   'pressao',
   'temperatura_ar',
-  'temperatura_solo',
+  'temperatura solo',
   'umidade_ar',
   'umidade_solo',
   'vento_direcao',
