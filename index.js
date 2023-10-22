@@ -30,11 +30,13 @@ app.get('/getData', async (req, res) => {
 
 const data = {};
 
-for (let i = 0; i < collections.length; i++) {
-  const collection = client.db('data_sensor').collection(collections[i]);
-  data[`labels${i + 1}`] = (await collection.find({}).toArray()).map(item => item.date);
-  data[`values${i + 1}`] = (await collection.find({}).toArray()).map(item => item.data);
-}
+ for (let i = 0; i < collections.length; i++) {
+      const collection = client.db('data_sensor').collection(collections[i]);
+      const dataItems = await collection.find({}).limit(20).toArray();
+      data[`labels${i + 1}`] = dataItems.map(item => item.date);
+      data[`values${i + 1}`] = dataItems.map(item => item.data);
+    }
+    
 
 // Feche a conexão com o MongoDB
 await client.close();
